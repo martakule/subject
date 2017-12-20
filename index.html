@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Subject formatter</title>
+	
+	<!-- The user of this tool wants it in as few files as possible, so both CSS and JS are here. -->
+	<style type="text/css">
+
+		body {
+			text-align: center;
+			font-family:Tahoma, Verdana, Segoe, sans-serif;
+			margin-top: 2em;
+			background-color: #f7f7f7;
+		}
+
+		#copy {
+			display: block;
+			margin: 1em auto;
+		}
+
+		button, input, p {
+			font-size: 1.5em;
+		}
+
+		input[type="date"] {
+			font-size:1em;
+		}
+
+		p {			
+			display: inline;
+		}
+
+		.result {
+			display: inline;
+			border:1px lightgrey solid;
+			padding: 5px 10px;
+			background-color: white;
+		}
+
+		.input {
+			margin:2em auto;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="input">
+		<button id="today">Today</button>
+		<input type="text" name="subject" id="subjectInput" placeholder="Subject">
+		<br><br>
+		<span>Or pick a date:</span> <input type="date" name="date" id="datePicker">
+	</div>
+	<div>
+		<p>Result: </p><p contenteditable="true" class="result" id="result"><span id="date"></span>_OK_<span id="subject"></span></p>
+<!-- 		<button id="copy">Copy to clipboard</button> -->
+	</div>
+
+<script type="text/javascript">
+	// Get today's date and display it in the result
+	document.getElementById("today").addEventListener("click", function(){
+		var date = new Date();
+		document.getElementById("date").innerText=date.getFullYear().toString()+(date.getMonth()+1).toString()+date.getDate().toString();
+	});
+
+	// Pick a date, remove dashes, and display it in the result
+	var datePicker = document.getElementById("datePicker");
+	datePicker.addEventListener("change", function(){
+		var dateNoDash = datePicker.value.split("-").join("");
+		document.getElementById("date").innerText=dateNoDash;
+	});	
+
+	// Get subject input and display it in the result
+	var subjectInput = document.getElementById("subjectInput");
+	subjectInput.addEventListener("keyup", function(){
+		document.getElementById("subject").innerText=subjectInput.value;
+	});	
+
+	// // Copy the text from the result to clipboard
+	// document.getElementById("copy").addEventListener("click", function(){
+	// 	var result = document.getElementById("result");
+	// 	var copyText = result.childNodes[0].childNodes[0].nodeValue+result.childNodes[1].nodeValue+result.childNodes[2].childNodes[0].nodeValue;
+	// 	//copyText = copyText.toString();
+	// 	console.log(typeof copyText);
+	//   copyText.select();
+	//   //document.execCommand("Copy");
+	// });	
+
+</script>
+</body>
+
+</html>
