@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Subject formatter</title>
-	
+
 	<!-- The user of this tool wants it in as few files as possible, so both CSS and JS are here. -->
 	<style type="text/css">
 
@@ -19,50 +19,66 @@
 		#copy {
 			display: block;
 			margin: 1em auto;
-		}
-
-		button, input, p {
-			font-size: 1.5em;
-		}
-
-		input[type="date"] {
-			font-size:1em;
-		}
-
-		p {			
-			display: inline;
+      font-size: 2em;
+      border-radius: 5px;
+      background-color: #f6b533;
+      color:#0d3c69;
+      padding: 5px 7px;
+      letter-spacing: 2px;
 		}
 
 		.result {
 			display: inline;
 			border:1px lightgrey solid;
+      box-shadow: 0 0 15px 2px grey;
 			padding: 5px 10px;
+      font-size: 2em;
 			background-color: white;
+      color:#0d3c69;
 		}
+
+    .copying {
+      box-shadow: 0 0 15px 6px #f6b533;
+    }
 
 		.input {
 			margin:2em auto;
 		}
 
+    #dummy {
+      opacity:0;
+    }
+
 	</style>
 </head>
 <body>
-	<div class="input">
-		<button id="today">Today</button>
-		<input type="text" name="subject" id="subjectInput" placeholder="Subject">
-		<br><br>
-		<span>Or pick a date:</span> <input type="date" name="date" id="datePicker">
-	</div>
 	<div>
-		<p>Result: </p><p contenteditable="true" class="result" id="result"><span id="date"></span>_OK_<span id="subject"></span></p>
-<!-- 		<button id="copy">Copy to clipboard</button> -->
+
+<!-- **********************************************
+ON THE LINE BELOW YOU CAN CHANGE YOUR INITIAL
+********************************************** -->
+
+		<p contenteditable="true" class="result" id="result"><span id="date"></span>_<!-- ************ HERE -->OK<!-- *************** -->_A/C#<span id="account"></span></p>
+		<button id="copy">COPY</button>
 	</div>
+  <div class="input">
+    <button id="today">Today</button>
+    <br><br>
+    <span>Date picker:</span> <input type="date" name="date" id="datePicker">
+  </div>
+  <textarea id="dummy"></textarea>
 
 <script type="text/javascript">
+
+  // Get today's date and display it in the result
+  function insertToday(){
+    var date = new Date();
+    document.getElementById("date").innerText=date.getFullYear().toString()+(date.getMonth()+1).toString()+date.getDate().toString();
+  };
+
 	// Get today's date and display it in the result
 	document.getElementById("today").addEventListener("click", function(){
-		var date = new Date();
-		document.getElementById("date").innerText=date.getFullYear().toString()+(date.getMonth()+1).toString()+date.getDate().toString();
+    insertToday();
 	});
 
 	// Pick a date, remove dashes, and display it in the result
@@ -70,24 +86,24 @@
 	datePicker.addEventListener("change", function(){
 		var dateNoDash = datePicker.value.split("-").join("");
 		document.getElementById("date").innerText=dateNoDash;
-	});	
+	});
 
-	// Get subject input and display it in the result
-	var subjectInput = document.getElementById("subjectInput");
-	subjectInput.addEventListener("keyup", function(){
-		document.getElementById("subject").innerText=subjectInput.value;
-	});	
+	// Copy the text from the result to dummy textarea and then to clipboard
+  // On click, flicker the border around what's being copied for feedback
+	document.getElementById("copy").addEventListener("click", function(){
+    var result = document.getElementById("result");
+    var dummy = document.getElementById("dummy");
+    var copyText = result.childNodes[0].childNodes[0].nodeValue+result.childNodes[1].nodeValue;
+    dummy.value = copyText;
+    dummy.select();
+    document.execCommand("copy");
+    console.log(dummy.value);
 
-	// // Copy the text from the result to clipboard
-	// document.getElementById("copy").addEventListener("click", function(){
-	// 	var result = document.getElementById("result");
-	// 	var copyText = result.childNodes[0].childNodes[0].nodeValue+result.childNodes[1].nodeValue+result.childNodes[2].childNodes[0].nodeValue;
-	// 	//copyText = copyText.toString();
-	// 	console.log(typeof copyText);
-	//   copyText.select();
-	//   //document.execCommand("Copy");
-	// });	
+    result.classList.add("copying");
+    setTimeout(function(){result.classList.remove("copying");}, 300);
+	});
 
+  insertToday();
 </script>
 </body>
 
