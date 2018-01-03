@@ -69,11 +69,21 @@ ON THE LINE BELOW YOU CAN CHANGE YOUR INITIAL
 
 <script type="text/javascript">
 
+  var today = [];
+  // Add zeros to single digits and stringify all
+  function makeNiceDate(x) {
+  	if (x<10) {today.push( "0"+x.toString() )}
+  		else {today.push( x.toString() )}
+  }
   // Get today's date and display it in the result
   function insertToday(){
     var date = new Date();
-    document.getElementById("date").innerText=date.getFullYear().toString()+(date.getMonth()+1).toString()+date.getDate().toString();
+    makeNiceDate(date.getFullYear());
+    makeNiceDate(date.getMonth()+1);
+    makeNiceDate(date.getDate());
+    document.getElementById("date").innerText=today.join("");
   };
+
 
 	// Get today's date and display it in the result
 	document.getElementById("today").addEventListener("click", function(){
